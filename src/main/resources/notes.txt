@@ -1,0 +1,2 @@
+// to kill all chromdriver process
+ sudo kill $(lsof -i -P | grep LISTEN | awk '/chromedri/ {print $2}')
