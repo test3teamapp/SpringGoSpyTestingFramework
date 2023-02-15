@@ -1,9 +1,6 @@
 package com.teamapp.gospy.testing;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
+import com.google.gson.*;
 import com.teamapp.gospy.models.Person;
 import org.springframework.data.geo.Point;
 
@@ -28,17 +25,20 @@ public class PersonJsonSerialiser implements JsonSerializer<Person> {
      */
     @Override
     public JsonElement serialize(Person o, Type type, JsonSerializationContext jsonSerializationContext) {
+        // debug
+        System.out.println("Serialising Person object  : " + o.getName());
+
         JsonObject object = new JsonObject();
         object.addProperty("name",o.getName() );
         object.addProperty("id", o.getId());
         object.addProperty("deviceToken", o.getDeviceToken());
-        object.addProperty("locationUpdated", o.getLocationUpdated().toString());
+        object.addProperty("locationUpdated", o.getLocationUpdated() == null ? "" :  o.getLocationUpdated().toString());
         // create location json object
         JsonObject locationObj = new JsonObject();
         Point locpoint = o.getLocation();
-        locationObj.addProperty("x",locpoint.getX());
-        locationObj.addProperty("y",locpoint.getY());
-        object.addProperty("location", locationObj.toString());
+        locationObj.addProperty("x", locpoint == null ? 0 : locpoint.getX());
+        locationObj.addProperty("y", locpoint == null ? 0 : locpoint.getY());
+        object.add("location", locationObj);
 
         return object;
     }
